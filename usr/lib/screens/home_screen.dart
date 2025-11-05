@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    HomeContent(),
+    Center(child: Text('Matches Screen')),
+    Center(child: Text('Players Screen')),
+    Center(child: Text('Profile Screen')),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,23 +41,58 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSearchBar(),
-              const SizedBox(height: 24),
-              _buildSectionTitle('Popular Games'),
-              const SizedBox(height: 16),
-              _buildPopularGames(),
-              const SizedBox(height: 24),
-              _buildSectionTitle('Upcoming Matches'),
-              const SizedBox(height: 16),
-              _buildUpcomingMatches(),
-            ],
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events),
+            label: 'Matches',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Players',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: const Color(0xFF1F1F3D),
+        type: BottomNavigationBarType.fixed,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSearchBar(),
+            const SizedBox(height: 24),
+            _buildSectionTitle('Popular Games'),
+            const SizedBox(height: 16),
+            _buildPopularGames(),
+            const SizedBox(height: 24),
+            _buildSectionTitle('Upcoming Matches'),
+            const SizedBox(height: 16),
+            _buildUpcomingMatches(),
+          ],
         ),
       ),
     );
